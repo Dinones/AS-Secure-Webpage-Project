@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from check_pdf import is_valid_pdf, save_pdf
 
 app = Flask(__name__, template_folder='webfiles')
 
@@ -18,16 +19,14 @@ def upload():
 
         # Check if the file has a valid PDF extension
         if uploaded_file and uploaded_file.filename.endswith('.pdf'):
-            # Save the file to a specific folder (create the folder if it doesn't exist)
-            upload_folder = '.'
-            uploaded_file.save(f"{upload_folder}/CV.pdf")
+            uploaded_file.save(f"temp_files/temp_CV.pdf")
+            is_valid_pdf(f"temp_files/temp_CV.pdf")
+            if not save_pdf(): return 'ERROR: There was an error saving the file. Please, try again.'
 
-            # Optionally, you can also do further processing with the uploaded PDF here
-
-            print(f"Uploaded file saved: {uploaded_file.filename}")
+            print(f"\nUploaded file saved: {uploaded_file.filename}\n")
             return 'File uploaded successfully!'
-        else: return 'Invalid file format. Please upload a PDF.'
-    return 'No file provided.'
+        else: return 'ERROR: Invalid file format. Please upload a PDF.'
+    return 'ERROR: No file provided.'
 
 if __name__ == '__main__':
     app.run(debug=True)
