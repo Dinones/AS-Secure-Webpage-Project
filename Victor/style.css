@@ -1,0 +1,140 @@
+body, html {
+    font-family: 'Arial', sans-serif;
+    /*background: url('./background.png') no-repeat center center fixed;*/
+    /*background-size: cover; /* Cover the entire area of the page */
+    margin: 0;
+    padding: 0;
+    height: 100%; 
+    color: #210F49;
+}
+
+.container {
+    width: 100%; /* Set container width to take full width of the viewport */
+    height: 100vh; /* Set container height to take full viewport height */
+    display: flex; /* Use flexbox to center content vertically and horizontally */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack items vertically */
+    text-align: center; /* Center text */
+}
+
+.navbar {
+    background-color: #210F49; /* Adjust the color to match your design */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 2em;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed; 
+    top: 0; /* Position at the top */
+    left: 0; /* Align to the left */
+    z-index: 1000;
+}
+
+.nav-links .nav-item {
+    text-decoration: none;
+    color: white;
+    margin-left: 1em;
+}
+
+.hero {
+
+    align-items: flex-start; /* Align the content to the top */
+    padding-top: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 50px 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* This makes the background semi-transparent */
+    color: #210F49;
+}
+
+.login-form form {
+    width: calc(50% - 40px); /* Assuming 50% is the width of your text content */
+    margin-left: -650px; /* Push the form to the right */
+    margin-right: auto; /* Spacing from the right side of the viewport */
+    margin-top: -80px; /* Adjust as needed to lower the form */
+    display: flex;
+    flex-direction: column; /* Stack the form items vertically */
+    width: 300px; /* Or any other width depending on your design */
+    margin-top: 20px; /* Or any other margin you find appropriate */
+}
+
+.login-form input {
+    margin-bottom: 10px; /* Space between form fields */
+    padding: 10px; /* Padding inside the input fields */
+    border: 1px solid #ddd; /* Border for the inputs */
+    border-radius: 5px; /* Rounded corners for the inputs */
+}
+
+.login-button {
+    padding: 10px; /* Padding inside the button */
+    border: none; /* No border for the button */
+    border-radius: 5px; /* Rounded corners for the button */
+    background-color: #210F49; /* Background color for the button */
+    color: white; /* Text color for the button */
+    cursor: pointer; /* Changes the cursor to a pointer on hover */
+}
+
+/* Adjust the content class to add margin to the top */
+.content {
+    margin-top: -370px; /* Adjust this value as needed to move content up */
+    width: 50%; /* Use width instead of max-width to control the size */
+    text-align: left; /* Align text to the left */
+    margin-right: auto;
+}
+
+.image-container {
+    width: 50%; /* Control the size of the image container */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.right-side-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.main-heading {
+    font-size: 2em;
+    margin-top: 0.5em;
+}
+
+.subtext {
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    text-decoration: none;
+    background-color: #210F49; /* Adjust the color to match your design */
+    color: #FFFFFF; /* Adjust the color to match your design */
+    padding: 0.5em 1em;
+    border-radius: 20px;
+}
+
+footer {
+    background-color: white; /* Adjust the color to match your design */
+    color: #210F49;
+    text-align: center;
+    padding: 1em 0;
+}
+
+/*about us style*/
+.about-heading {
+    font-size: 2.5em;
+    color: #210F49; /* Use your brand's purple color */
+    margin-bottom: 20px; /* Add some space below the heading */
+}
+
+.profile-container {
+    margin-bottom: 20px; /* Add some space between the profile container and job matches */
+    
+}
+
+.job-matches {
+    width: 100%; /* Take the full width of its parent */
+    margin-bottom: 20px; /* Add some space between each job match */
+  
+   
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+        main {
+            padding: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+        #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Your Website Title</h1>
+    </header>
+
+    <main>
+        <h2>Welcome to Your Website!</h2>
+        <p>This is a simple HTML template.</p>
+        <form id="helloForm">
+            <button type="button" onclick="sayHello()">Print Hello CMD</button>
+        </form>
+        <p></p>
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" accept=".pdf">
+            <p></p>
+            <button type="button" onclick="uploadDocument()">Upload PDF</button>
+            <p id="errorMessage"></p>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Your Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function sayHello() {
+            // Send an AJAX request to the server
+            fetch('/say_hello', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+        
+        function uploadDocument() {
+            // Get the file input element
+            const fileInput = document.getElementById('fileInput');
+            
+            // Create a FormData object and append the file
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            // Send an AJAX request to the server
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            // .then(message => console.log(message))
+            .then(message => {
+                if (message.startsWith('ERROR:')) {
+                    // Display the error message in red under the button
+                    document.getElementById('errorMessage').textContent = message;
+                    console.log(message);
+                } else {
+                    // Log the success message to the console
+                    console.log(message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>
