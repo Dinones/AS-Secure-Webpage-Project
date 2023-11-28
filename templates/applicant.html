@@ -31,7 +31,7 @@
         <script>
             // Use JavaScript to fetch job offers and update the HTML
             document.addEventListener('DOMContentLoaded', function () {
-                fetch('/get_job_offers')
+                fetch('/get_job_offers_applicant')
                     .then(response => response.json())
                     .then(data => {
                         const jobOffersContainer = document.getElementById('jobOffersContainer');
@@ -43,9 +43,12 @@
                             <div style="margin: 20px;">
                                 <h2>${jobOffer.title}</h2>
                                 <p>${jobOffer.description}</p>
-                                <a href="{{ url_for('home') }}">
-                                    <button>Apply to Offer</button>
-                                </a>
+                                ${jobOffer.alreadyApplied ? 
+                                    '<p>You already applied to this offer!</p>' : 
+                                    `<a href="{{ url_for('applicant') }}">
+                                        <button>Apply to Offer</button>
+                                    </a>`
+                                }
                             </div>`;
                             jobOffersContainer.appendChild(jobOfferDiv);
                         });
