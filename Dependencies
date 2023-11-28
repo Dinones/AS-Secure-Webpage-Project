@@ -2,3 +2,4 @@ pip install PyMuPDF
 pip install pyodbc
 pip install flask
 pip install bcrypt
+pip install pyopenssl

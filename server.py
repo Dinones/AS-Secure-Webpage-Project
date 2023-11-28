@@ -301,4 +301,5 @@ def apply_to_offer_database(userID, jobTitle):
 if __name__ == '__main__':
     connect_to_database()
     try: app.run(debug=True)
+    # try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
     except: disconnect_from_database()
