@@ -24,6 +24,7 @@ CREATE TABLE Applicant (
 CREATE TABLE Offer (
     OfferID INT PRIMARY KEY,
     RecruiterID INT,
+    OfferTitle NVARCHAR(100),
     OfferDescription NVARCHAR(1000) NOT NULL,
     FOREIGN KEY (RecruiterID) REFERENCES Recruiter(UserID)
 );
