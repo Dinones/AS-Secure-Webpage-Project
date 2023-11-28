@@ -151,6 +151,25 @@ def get_job_offers():
 
     return jsonify(job_offers)
 
+@app.route('/get_job_offers_applicant', methods=['GET'])
+def get_job_offers_applicant():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.APPLICANT: return "ERROR: Logged user is not an applicant"
+
+    job_offers = get_job_offers_from_database(ActiveUser.userID)
+
+    print(job_offers)
+
+    return jsonify(job_offers)
+    
 #################################################################################################################
 
 def connect_to_database():
@@ -243,6 +262,25 @@ def get_job_offers_from_database(userID):
         dictionary = {}
         dictionary['title'] = row[0]
         dictionary['description'] = row[1]
+        jobOffers.append(dictionary)
+
+    return jobOffers
+
+def get_job_offers_from_database_for_applicant(userID):
+    global cursor, connection
+
+    print("Getting job offers for applicant...")
+    cursor.execute(f"SELECT O.OfferTitle, O.OfferDescription, CASE WHEN OA.UserID IS NOT NULL THEN 'true' ELSE 'false' END 
+        AS IsRelated FROM Offer O LEFT JOIN OfferApplicant OA ON O.OfferID = OA.OfferID AND OA.UserID = {userID};")
+
+    rows = cursor.fetchall()
+
+    jobOffers = []
+    for row in rows:
+        dictionary = {}
+        dictionary['title'] = row[0]
+        dictionary['description'] = row[1]
+        dictionary['alreadyApplied'] = row[2]
         jobOffers.append(dictionary)
 
     return jobOffers
