@@ -11,7 +11,7 @@ CREATE TABLE MainUser (
     PasswordHash NVARCHAR(100) NOT NULL,
     FirstName NVARCHAR(50) NOT NULL,
     LastName NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) NOT NULL UNIQUE,
     TelephoneNumber NVARCHAR(15),
     UserType NVARCHAR(10),
     UserPublicKey NVARCHAR(256)
@@ -32,7 +32,7 @@ CREATE TABLE Applicant (
 CREATE TABLE Offer (
     OfferID INT PRIMARY KEY,
     RecruiterID INT NOT NULL,
-    OfferTitle NVARCHAR(100) NOT NULL,
+    OfferTitle NVARCHAR(100) NOT NULL UNIQUE,
     OfferDescription NVARCHAR(1000) NOT NULL,
     FOREIGN KEY (RecruiterID) REFERENCES Recruiter(UserID)
 );
