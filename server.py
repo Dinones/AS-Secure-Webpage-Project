@@ -151,17 +151,40 @@ def get_job_offers_applicant():
 
     return jsonify(job_offers)
 
+# @app.route('/apply_to_offer', methods=['POST'])
+# def apply_to_offer():
+#     data = request.get_json()
+#     if 'title' in data:
+#         offer_title = data['title']
+#         print(f"Applying to offer: {offer_title}")
+
+#         # Return the redirect URL as a JSON response
+#         return jsonify({'redirect': url_for('applicant')})
+#     else:
+#         return jsonify({'error': 'Invalid request'})
+
 @app.route('/apply_to_offer', methods=['POST'])
 def apply_to_offer():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.APPLICANT: return "ERROR: Logged user is not an applicant"
+
     data = request.get_json()
     if 'title' in data:
         offer_title = data['title']
         print(f"Applying to offer: {offer_title}")
+    else: return jsonify({'error': 'Invalid request'})
 
-        # Return the redirect URL as a JSON response
-        return jsonify({'redirect': url_for('applicant')})
-    else:
-        return jsonify({'error': 'Invalid request'})
+    if apply_to_offer_database(ActiveUser.userID, offer_title): return jsonify({'redirect': url_for('applicant')})
+    else: return jsonify({'error': 'Could not apply to job offer'})
+
 
 #################################################################################################################
 
@@ -258,6 +281,20 @@ def get_job_offers_from_database_for_applicant(userID):
         jobOffers.append(dictionary)
 
     return jobOffers
+
+
+def apply_to_offer_database(userID, jobTitle):
+    global cursor, connection
+    try:
+        print("Getting job offers for applicant...")
+        cursor.execute(f"INSERT INTO OfferApplicant (OfferID, UserID) SELECT O.OfferID, A.UserID FROM Offer O JOIN Applicant A ON A.UserID = {userID} WHERE O.OfferTitle = '{jobTitle}';")
+
+        connection.commit()
+    except pyodbc.Error as e:
+        print(f"Error inserting relationship: {e}")
+        return False
+
+    return True
 
 #################################################################################################################
 
