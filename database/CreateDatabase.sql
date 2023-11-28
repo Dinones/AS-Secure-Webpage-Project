@@ -5,7 +5,8 @@ CREATE TABLE MainUser (
     LastName NVARCHAR(50) NOT NULL,
     Email NVARCHAR(100) NOT NULL,
     TelephoneNumber NVARCHAR(15),
-    UserType NVARCHAR(10)
+    UserType NVARCHAR(10),
+    UserPublicKey NVARCHAR(256)
 );
 
 CREATE TABLE Recruiter (
@@ -22,12 +23,15 @@ CREATE TABLE Applicant (
 
 CREATE TABLE Offer (
     OfferID INT PRIMARY KEY,
-    OfferDescription NVARCHAR(1000) NOT NULL
+    RecruiterID INT,
+    OfferDescription NVARCHAR(1000) NOT NULL,
+    FOREIGN KEY (RecruiterID) REFERENCES Recruiter(UserID)
 );
 
 CREATE TABLE OfferApplicant (
     OfferID INT,
     UserID INT,
+    CV_EncryptedKey NVARCHAR(256),
     PRIMARY KEY (OfferID, UserID),
     FOREIGN KEY (OfferID) REFERENCES Offer(OfferID),
     FOREIGN KEY (UserID) REFERENCES Applicant(UserID)
