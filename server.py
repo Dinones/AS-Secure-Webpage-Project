@@ -198,9 +198,9 @@ def get_recruiter_applicants():
 
     if ActiveUser.userType != UserType.RECRUITER: return "ERROR: Logged user is not a recruiter"
 
-    recruiters = get_recruiter_applicants(ActiveUser.userID)
+    recruiters = get_recruiter_applicants_from_database(ActiveUser.userID)
 
-    return recruiters(job_offers)
+    return jsonify(recruiters)
 
 #################################################################################################################
 
@@ -313,7 +313,6 @@ def apply_to_offer_database(userID, jobTitle):
     return True
 
 def get_recruiter_applicants_from_database(userID):
-
     global cursor, connection
 
     print("Getting job offers for applicant...")
