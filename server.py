@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from check_pdf import is_valid_pdf, save_pdf
 from enum import Enum
 import pyodbc
@@ -51,7 +51,6 @@ def check_credentials():
     elif UserType == 1: return redirect(url_for('applicant'))
     else: return redirect(url_for('recruiter'))
 
-
 @app.route('/upload', methods=['POST']) 
 def upload():
     if 'file' in request.files:
@@ -63,9 +62,7 @@ def upload():
             if not is_valid_pdf(f"temp_files/temp_CV.pdf"): 
                 os.remove(f"temp_files/temp_CV.pdf")
                 return 'ERROR: Invalid file format. Please upload a PDF.'
-            save_pdf()
-            upload_pdf('./CV.pdf')
-            download_pdf()
+            upload_pdf_to_database()
 
             print(f"\nUploaded file saved: {uploaded_file.filename}\n")
             return 'File uploaded successfully!'
@@ -115,9 +112,10 @@ def check_login(email, password):
         return User.RECRUITER.value if rows[0][2] == 'Recruiter' else User.APPLICANT.value
     else: return 0
 
-def upload_pdf(pdf_path):
+def upload_pdf_to_database(pdf_path = './temp_files/temp_CV.pdf'):
     global cursor, connection
 
+    if not os.path.exists(pdf_path): return print(f"Error uploading file to the database")
     try:
         with open(pdf_path, 'rb') as file:
             cursor.execute(f"UPDATE Applicant SET [CV] = (?) WHERE UserID = 1", file.read())
@@ -125,8 +123,9 @@ def upload_pdf(pdf_path):
         print("File successfully updated!")
     except pyodbc.Error as e: 
         print(f"Error uploading file to the database: {e}")
+    os.remove(pdf_path)
 
-def download_pdf(output_pdf_path = './DOWNLOADED_CV.pdf'):
+def download_pdf_from_database(output_pdf_path = './temp_files/temp_CV.pdf'):
     global cursor, connection
 
     cursor.execute(f"SELECT [CV] FROM Applicant WHERE UserID = 1")
@@ -134,6 +133,15 @@ def download_pdf(output_pdf_path = './DOWNLOADED_CV.pdf'):
     if row:
         with open(output_pdf_path, 'wb') as file:
             file.write(row[0])
+
+@app.route('/send_document_to_user')
+def send_document_to_user():
+    download_pdf_from_database()
+    document_path = './temp_files/temp_CV.pdf'
+    document_name = 'CV.pdf'
+
+    # Send the file to the user for download
+    return send_file(document_path, as_attachment=True, attachment_filename=document_name)
 
 #################################################################################################################
 
