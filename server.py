@@ -151,6 +151,18 @@ def get_job_offers_applicant():
 
     return jsonify(job_offers)
 
+@app.route('/apply_to_offer', methods=['POST'])
+def apply_to_offer():
+    data = request.get_json()
+    if 'title' in data:
+        offer_title = data['title']
+        print(f"Applying to offer: {offer_title}")
+
+        # Return the redirect URL as a JSON response
+        return jsonify({'redirect': url_for('applicant')})
+    else:
+        return jsonify({'error': 'Invalid request'})
+
 #################################################################################################################
 
 def connect_to_database():

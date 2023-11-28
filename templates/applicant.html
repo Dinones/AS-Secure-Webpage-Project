@@ -45,9 +45,7 @@
                                 <p>${jobOffer.description}</p>
                                 ${jobOffer.alreadyApplied ? 
                                     '<p>You already applied to this offer!</p>' : 
-                                    `<a href="{{ url_for('applicant') }}">
-                                        <button>Apply to Offer</button>
-                                    </a>`
+                                    `<button onclick="applyToOffer('${jobOffer.title}')">Apply to Offer</button>`
                                 }
                             </div>`;
                             jobOffersContainer.appendChild(jobOfferDiv);
@@ -55,6 +53,29 @@
                     })
                     .catch(error => console.error('Error fetching job offers:', error));
             });
+
+            function applyToOffer(title) {
+                // Use fetch to send the title to the backend
+                fetch('/apply_to_offer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title: title }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response from the backend
+                    console.log(data);
+
+                    // Check for a success message or condition
+                    if (data && data.redirect) {
+                        // Redirect the client-side browser to the specified URL
+                        window.location.replace(data.redirect);
+                    }
+                })
+                .catch(error => console.error('Error applying to offer:', error));
+            }
         </script>
     </div>
 </body>
