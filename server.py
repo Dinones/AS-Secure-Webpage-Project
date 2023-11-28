@@ -151,8 +151,19 @@ def get_job_offers_applicant():
 
     return jsonify(job_offers)
 
+# @app.route('/apply_to_offer', methods=['POST'])
+# def apply_to_offer():
+#     data = request.get_json()
+#     if 'title' in data:
+#         offer_title = data['title']
+#         print(f"Applying to offer: {offer_title}")
 
-@app.route('/apply_to_offer', methods=['GET'])
+#         # Return the redirect URL as a JSON response
+#         return jsonify({'redirect': url_for('applicant')})
+#     else:
+#         return jsonify({'error': 'Invalid request'})
+
+@app.route('/apply_to_offer', methods=['POST'])
 def apply_to_offer():
     if 'session_token' in session:
         session_token = session['session_token']
@@ -165,8 +176,14 @@ def apply_to_offer():
 
     if ActiveUser.userType != UserType.APPLICANT: return "ERROR: Logged user is not an applicant"
 
-    if apply_to_offer_database(ActiveUser.userID): return "Applied correctly"
-    else: return "ERROR: Could not apply to the offer"
+    data = request.get_json()
+    if 'title' in data:
+        offer_title = data['title']
+        print(f"Applying to offer: {offer_title}")
+    else: return jsonify({'error': 'Invalid request'})
+
+    if apply_to_offer_database(ActiveUser.userID, offer_title): return jsonify({'redirect': url_for('applicant')})
+    else: return jsonify({'error': 'Could not apply to job offer'})
 
 @app.route('/get_recruiter_applicants', methods=['GET'])
 def get_recruiter_applicants():
@@ -286,7 +303,7 @@ def apply_to_offer_database(userID, jobTitle):
     global cursor, connection
     try:
         print("Getting job offers for applicant...")
-        cursor.execute(f"INSERT INTO OfferApplicant (OfferID, UserID) SELECT O.OfferID, A.UserID FROM Offer O JOIN Applicant A ON A.UserID = {userID} WHERE O.OfferTitle = {jobTitle};")
+        cursor.execute(f"INSERT INTO OfferApplicant (OfferID, UserID) SELECT O.OfferID, A.UserID FROM Offer O JOIN Applicant A ON A.UserID = {userID} WHERE O.OfferTitle = '{jobTitle}';")
 
         connection.commit()
     except pyodbc.Error as e:
