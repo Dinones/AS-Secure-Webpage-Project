@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from check_pdf import is_valid_pdf, save_pdf
 from enum import Enum
 import pyodbc
@@ -118,14 +118,33 @@ def upload():
         else: return 'ERROR: Invalid file format. Please upload a PDF.'
     return 'ERROR: No file provided.'
 
+@app.route('/job_offers', methods=['GET'])
+def get_job_offers():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.RECRUITER: return "ERROR: Logged user is not a recruiter"
+
+    job_offers = get_job_offers_from_database(ActiveUser.userID)
+
+    print(job_offers)
+
+    return jsonify(job_offers)
+
 #################################################################################################################
 
 def connect_to_database():
     global cursor, connection
-    server = 'MSI'
+    server = 'FERRANPALMADAPC'
     database = 'as'
-    username = 'aleix'
-    password = 'aleix123'
+    username = 'ferran'
+    password = 'ferran123'
 
     # Define the connection string
     connection_string = f'DRIVER=SQL Server;SERVER={server};DATABASE={database};UID={username};PWD={password}'
@@ -195,6 +214,24 @@ def send_document_to_user():
 
     # Send the file to the user for download
     return send_file(document_path, as_attachment=True, attachment_filename=document_name)
+
+def get_job_offers_from_database(userID):
+    global cursor, connection
+
+    print("Getting job offers...")
+    cursor.execute(f"SELECT OfferTitle, OfferDescription FROM Offer WHERE RecruiterID = '{userID}'")
+
+    rows = cursor.fetchall()
+
+    jobOffers = []
+    for row in rows:
+        dictionary = {}
+        dictionary['title'] = row[0]
+        dictionary['description'] = row[1]
+        jobOffers.append(dictionary)
+
+    return jobOffers
+
 
 #################################################################################################################
 
