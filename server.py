@@ -185,6 +185,22 @@ def apply_to_offer():
     if apply_to_offer_database(ActiveUser.userID, offer_title): return jsonify({'redirect': url_for('applicant')})
     else: return jsonify({'error': 'Could not apply to job offer'})
 
+@app.route('/get_recruiter_applicants', methods=['GET'])
+def get_recruiter_applicants():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.RECRUITER: return "ERROR: Logged user is not a recruiter"
+
+    recruiters = get_recruiter_applicants(ActiveUser.userID)
+
+    return recruiters(job_offers)
 
 #################################################################################################################
 
@@ -295,6 +311,30 @@ def apply_to_offer_database(userID, jobTitle):
         return False
 
     return True
+
+def get_recruiter_applicants_from_database(userID):
+
+    global cursor, connection
+
+    print("Getting job offers for applicant...")
+    cursor.execute(f"SELECT CONCAT(MU.FirstName, ' ', MU.LastName) AS [Name], \
+                            CONCAT('Applied for: ', O.OfferTitle) AS Applied, \
+                            CONCAT('Email: ', MU.Email) AS Email, \
+                            CONCAT('Telephone number: ', MU.TelephoneNumber) AS TelephoneNumber \
+                    FROM OfferApplicant OA JOIN Offer O ON OA.OfferID = O.OfferID JOIN MainUser MU ON OA.UserID = MU.UserID WHERE O.recruiterID = {userID};")
+
+    rows = cursor.fetchall()
+
+    applicants = []
+    for row in rows:
+        dictionary = {}
+        dictionary['Name'] = row[0]
+        dictionary['Applied'] = row[1]
+        dictionary['Email'] = row[2]
+        dictionary['TelephoneNumber'] = row[3]
+        applicants.append(dictionary)
+
+    return applicants
 
 #################################################################################################################
 
