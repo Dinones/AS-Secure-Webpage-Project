@@ -132,7 +132,7 @@ def upload():
         else: return 'ERROR: Invalid file format. Please upload a PDF.'
     return 'ERROR: No file provided.'
 
-@app.route('/job_offers', methods=['GET'])
+@app.route('/get_job_offers', methods=['GET'])
 def get_job_offers():
     if 'session_token' in session:
         session_token = session['session_token']
@@ -143,9 +143,9 @@ def get_job_offers():
         else: return 'ERROR: Invalid session.'
     else: return 'ERROR: Not logged in.'
 
-    if ActiveUser.userType != UserType.RECRUITER: return "ERROR: Logged user is not a recruiter"
+    if ActiveUser.userType != UserType.APPLICANT: return "ERROR: Logged user is not an applicant"
 
-    job_offers = get_job_offers_from_database(ActiveUser.userID)
+    job_offers = get_job_offers_from_database(0)
 
     print(job_offers)
 
@@ -155,10 +155,10 @@ def get_job_offers():
 
 def connect_to_database():
     global cursor, connection
-    server = 'FERRANPALMADAPC'
+    server = 'MSI'
     database = 'as'
-    username = 'ferran'
-    password = 'ferran123'
+    username = 'aleix'
+    password = 'aleix123'
 
     # Define the connection string
     connection_string = f'DRIVER=SQL Server;SERVER={server};DATABASE={database};UID={username};PWD={password}'
@@ -233,7 +233,8 @@ def get_job_offers_from_database(userID):
     global cursor, connection
 
     print("Getting job offers...")
-    cursor.execute(f"SELECT OfferTitle, OfferDescription FROM Offer WHERE RecruiterID = '{userID}'")
+    if userID == 0: cursor.execute(f"SELECT OfferTitle, OfferDescription FROM Offer")
+    else: cursor.execute(f"SELECT OfferTitle, OfferDescription FROM Offer WHERE RecruiterID = '{userID}'")
 
     rows = cursor.fetchall()
 
@@ -245,7 +246,6 @@ def get_job_offers_from_database(userID):
         jobOffers.append(dictionary)
 
     return jobOffers
-
 
 #################################################################################################################
 
