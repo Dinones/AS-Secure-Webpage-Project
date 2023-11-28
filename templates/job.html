@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - EliteStaff Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="navbar">
+                <div class="logo">EliteStaff Solutions</div>
+                <div class="nav-links">
+                    <a href="{{ url_for('applicant') }}" class="nav-item">Back</a>
+                </div>
+            </div>
+        </header>
+        
+        <main class="hero">
+            <div class="job-details-container">
+                <h2 class="job-title">SOC Analyst</h2>
+                <p class="job-description">Lorem ipsum praesent ac massa at ligula reet est iaculis. Vivamus est mist aliquet elit ac nisl.</p>
+                <button class="apply-button" onclick="location.href='jobconfirm.html'">Apply for this position</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2023 All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+</html>

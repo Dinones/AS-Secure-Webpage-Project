@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recruitment Dashboard - EliteStaff Solutions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -12,7 +12,7 @@
             <div class="navbar">
                 <div class="logo">EliteStaff Solutions</div>
                 <div class="nav-links">
-                    <a href="{{ url_for('home') }}" class="nav-item">Home</a>
+                    <a href="index.html" class="nav-item">Logout</a>
                 </div>
             </div>
         </header>
@@ -26,8 +26,17 @@
                     <p>Applied for: SOC Analyst</p>
                     <p>Email: tina.moran@example.com</p>
                     <p>Phone: (123) 456-7890</p>
-                    <a href="{{ url_for('send_document_to_user') }}" download><button>Download CV</button></a>
+                    <a href="resume-view.html" class="view-resume-link">View Resume</a>
                 </div>
+                <!-- Repeat for each applicant -->
+            </section>
+            
+            <section class="contact-list">
+                <h2>Contact List</h2>
+                <ul>
+                    <li>Tina Moran - tina.moran@example.com - (123) 456-7890</li>
+                    <!-- Repeat for each contact -->
+                </ul>
             </section>
         </main>
 

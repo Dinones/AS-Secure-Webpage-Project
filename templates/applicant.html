@@ -1,52 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EliteStaff Solutions</title>
+    <title>User Profile - EliteStaff Solutions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
-    <p>HELLO APPLICANT!</p>
-    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="fileInput" accept=".pdf">
-        <p></p>
-        <button type="button" onclick="uploadDocument()">Upload PDF</button>
-        <p id="errorMessage"></p>
-    </form>
+    <div class="container">
+        <header>
+            <div class="navbar">
+                <div class="logo">EliteStaff Solutions</div>
+                <div class="nav-links">
+                    <a href="{{ url_for('home') }}" class="nav-item">Home</a>
+                </div>
+            </div>
+        </header>
+        
+        <main class="hero">
+            <!-- <div class="profile-container">
+                <h2 class="profile-name"><a href="resume.html" target="_blank">Tina Moran</a></h2>
+                <h1 class="qualified-heading">You are highly-qualified for the following positions:</h1>
+            </div> -->
+            <div style="margin: 20px;">
+                <a href="{{ url_for('job') }}" class="view-link">View</a>
+                <h2>SOC Analyst</h2>
+                <p>Lorem ipsum praesent ac massa at ligula reet est iaculis. Vivamus est mist aliquet elit ac nisl.</p>
+            </div>
 
-    <script>
-        function uploadDocument() {
-            // Get the file input element
-            const fileInput = document.getElementById('fileInput');
-            
-            // Create a FormData object and append the file
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+            <div style="margin: 20px;">
+                <a href="{{ url_for('job') }}" class="view-link">View</a>
+                <h2>Incident Response</h2>
+                <p>Lorem ipsum praesent ac massa at ligula reet est iaculis. Vivamus est mist aliquet elit ac nisl.</p>
+            </div>
+            </div>
+        </main>
 
-            // Send an AJAX request to the server
-            fetch('/upload', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.text())
-            // .then(message => console.log(message))
-            .then(message => {
-                if (message.startsWith('ERROR:')) {
-                    // Display the error message in red under the button
-                    document.getElementById('errorMessage').textContent = message;
-                    console.log(message);
-                } else {
-                    // Log the success message to the console
-                    console.log(message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+        <footer>
+            <p>© 2023 All Rights Reserved</p>
+        </footer>
+    </div>
 </body>
 </html>
-
-

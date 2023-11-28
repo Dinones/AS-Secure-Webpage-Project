@@ -138,3 +138,65 @@ footer {
   
    
 }
+/* ========================== Style for Job info pages================================== */
+
+/* ... existing styles ... */
+
+.job-details-container {
+    margin-top: 100px; /* Adjust according to your header's height */
+    padding: 0 20px; /* Add some padding on the sides */
+}
+
+.job-title {
+    color: #210F49; /* Use your brand color */
+    margin-bottom: 20px; /* Space between title and description */
+}
+
+.job-description {
+    margin-bottom: 30px; /* Space between description and button */
+}
+
+.apply-button {
+    padding: 10px 20px; /* Button padding */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #210F49; /* Background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Cursor effect on hover */
+    text-transform: uppercase; /* Optional: capitalize letters */
+    font-weight: bold; /* Optional: make text bold */
+}
+
+.apply-button:hover {
+    background-color: #1e0e3f; /* Darker shade for hover effect */
+}
+
+/* ... Job Confirmation... */
+
+.confirmation-container {
+    margin-top: 100px; /* Adjust according to your header's height */
+    padding: 0 20px; /* Add some padding on the sides */
+    text-align: center; /* Center text for confirmation */
+}
+
+/* ... Resume Viewer... */
+
+.resume-container {
+    margin-top: 100px; /* Adjust as needed */
+    padding: 0 20px; /* Add some padding on the sides */
+    text-align: center; /* Center text for the resume page */
+}
+
+.resume-content {
+    margin-top: 20px;
+    border: 1px solid #ddd; /* A light border around the resume content */
+    padding: 15px;
+    background-color: #fff; /* A white background for the resume content */
+    height: 500px; /* Or any other height */
+    overflow: auto; /* In case the content overflows */
+}
+
+/* ... any additional styles ... */
+
+
+

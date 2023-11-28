@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, jsonify
 from check_pdf import is_valid_pdf, save_pdf
 from enum import Enum
 import pyodbc
@@ -39,6 +39,20 @@ def home():
 def about():
     return render_template('about.html')
 
+@app.route('/job')
+def job():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType == UserType.APPLICANT: return render_template('job.html')
+    else: return "ERROR: Logged user is not an applicant"
+
 @app.route('/applicant')
 def applicant():
     if 'session_token' in session:
@@ -69,7 +83,7 @@ def recruiter():
 
 @app.route('/say_hello', methods=['POST'])
 def say_hello():
-    print("\nBaby hellooo! Fue por la historia que subiste a tu close!\n")
+    print("\nHello World!\n")
     return ''
 
 @app.route('/check_credentials', methods=['POST'])
