@@ -214,8 +214,3 @@ rsa = PKCS1_OAEP.new(recruiter_pk)
 enc_key = rsa.encrypt(CV_key)
 ##store enc_key in db for recruiter
 '''
-
-#DON'T USE YET, NOT FINISHED
-#SQL injection
-import re
-result = re.sub('[^a-zA-Z0-9.]+@+[^a-zA-Z0-9.]+.+[^a-z]', '', '_abcd!?123')
