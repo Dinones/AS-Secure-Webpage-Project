@@ -3,3 +3,5 @@ pip install pyodbc
 pip install flask
 pip install bcrypt
 pip install pyopenssl
+pip install pypdf
+pip install pycryptodome

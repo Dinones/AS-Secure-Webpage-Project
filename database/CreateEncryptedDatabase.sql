@@ -2,10 +2,10 @@ CREATE TABLE MainUser (
     UserID INT PRIMARY KEY,
     [id] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL UNIQUE DEFAULT NEWID(),
     PasswordHash NVARCHAR(100) NOT NULL,
-    FirstName VARBINARY(MAX) NOT NULL,
-    LastName VARBINARY(MAX) NOT NULL,
+    EncryptedFirstName VARBINARY(MAX) NOT NULL,
+    EncryptedLastName VARBINARY(MAX) NOT NULL,
     Email NVARCHAR(100) NOT NULL UNIQUE,
-    TelephoneNumber VARBINARY(MAX),
+    EncryptedTelephoneNumber VARBINARY(MAX),
     UserType NVARCHAR(10),
     UserPublicKey VARBINARY(MAX) FILESTREAM DEFAULT (0x),
     EncryptedSymmetricKey VARBINARY(MAX)

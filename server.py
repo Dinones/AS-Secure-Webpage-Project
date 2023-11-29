@@ -228,10 +228,10 @@ def get_user_info():
 
 def connect_to_database():
     global cursor, connection
-    server = 'FERRANPALMADAPC'
+    server = 'MSI'
     database = 'as'
-    username = 'ferran'
-    password = 'ferran123'
+    username = 'aleix'
+    password = 'aleix123'
 
     # Define the connection string
     connection_string = f'DRIVER=SQL Server;SERVER={server};DATABASE={database};UID={username};PWD={password}'
@@ -349,8 +349,8 @@ def send_document_to_user():
     document_path = './temp_files/temp_CV.pdf'
     document_name = 'CV.pdf'
 
-    # return send_file(document_path, as_attachment=True, attachment_filename=document_name)
-    return send_file(document_path, as_attachment=True, download_name=document_name)
+    return send_file(document_path, as_attachment=True, attachment_filename=document_name)
+    # return send_file(document_path, as_attachment=True, download_name=document_name)
 
 def get_job_offers_from_database_for_applicant(userID):
     global cursor, connection
@@ -483,46 +483,20 @@ if __name__ == '__main__':
 
     ####### THIS CODE UPLOADS THE SampleKeys\ FILES TO THE DATABASE #######
 
-    #with open('database\SampleKeys\public_key_user1.pem', 'rb') as file:
-    #    cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 1", file.read())
-    #connection.commit()
-#
-    #with open('database\SampleKeys\public_key_user2.pem', 'rb') as file:
-    #    cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 2", file.read())
-    #connection.commit()
-#
-    #with open('database\SampleKeys\public_key_user3.pem', 'rb') as file:
-    #    cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 3", file.read())
-    #connection.commit()
+    # with open('database\SampleKeys\public_key_user1.pem', 'rb') as file:
+    #     cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 1", file.read())
+    # connection.commit()
+
+    # with open('database\SampleKeys\public_key_user2.pem', 'rb') as file:
+    #     cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 2", file.read())
+    # connection.commit()
+
+    # with open('database\SampleKeys\public_key_user3.pem', 'rb') as file:
+    #     cursor.execute(f"UPDATE MainUser SET UserPublicKey = (?) WHERE UserID = 3", file.read())
+    # connection.commit()
     
     ########################################################################
-    
-    '''
-    cursor.execute("SELECT * FROM MainUser;")
 
-    rows = cursor.fetchall()
-
-    passwords = ["password123", "1234", "admins"]
-    i = 0
-    for row in rows:
-        user_data = [row[2], row[3], row[5]]
-        _, user_pk_path, enc_user_data, enc_key, _ = login(passwords[i], row[1], user_data, None)
-
-        print(f"User {i+1}: User data: {[binascii.hexlify(element).decode('utf-8') for element in enc_user_data]}, key: {binascii.hexlify(enc_key).decode('utf-8')}")
-        
-        i += 1
-        # hex_array = [binascii.hexlify(element).decode('utf-8') for element in enc_user_data]
-
-    '''
-
-
-    try: app.run(debug=True)
-    #try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
-    except: disconnect_from_database()
     #try: app.run(debug=True)
-
-
-
-    # try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
-    #except: disconnect_from_database()
-    
+    try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
+    except: disconnect_from_database()   
