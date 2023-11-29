@@ -14,7 +14,8 @@ CREATE TABLE MainUser (
     Email NVARCHAR(100) NOT NULL UNIQUE,
     TelephoneNumber NVARCHAR(15),
     UserType NVARCHAR(10),
-    UserPublicKey NVARCHAR(256)
+    UserPublicKey NVARCHAR(256),
+    EncryptedSymmetricKey NVARCHAR(256)
 );
 
 CREATE TABLE Recruiter (
@@ -67,3 +68,6 @@ INSERT INTO Offer (OfferID, RecruiterID, OfferTitle, OfferDescription) VALUES
 INSERT INTO OfferApplicant (OfferID, UserID) VALUES
     (1,1),
     (2,2);
+
+
+    

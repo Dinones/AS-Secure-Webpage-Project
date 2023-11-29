@@ -1,0 +1,29 @@
+DELETE FROM MainUser;
+DELETE FROM Recruiter;
+DELETE FROM Applicant;
+DELETE FROM Offer;
+DELETE FROM OfferApplicant;
+
+INSERT INTO MainUser (UserID, PasswordHash, EncryptedFirstName, EncryptedLastName, Email, EncryptedTelephoneNumber, UserType, EncryptedSymmetricKey) VALUES
+    (1, '$2b$12$qni37LHcVYDi6NZzBUN7/uwSPf2xPj.VeOkIjc6nLt1CqWF8EUBqe', 0xf7df17a759, 0x75f94721, 'larryka@gmail.com', 0x3271d3e676ea26aabc, 'Applicant', 
+    0x902e0852f623b242c8eaf893746abb74566938a4f55227f0bdd5e7358b32a866f906820e79d455724b2be32c18c0f7a2822d1ecd39dfb5b22587c2905d8f49956df50fba87d666913b7cb33a1e980f61e134a53069852f3fb73a6ea9673950d3bce7598cad16bffc535c237528f161eed35086b48ad4b042239dd169c12cafde8b989829009f90b68598e34dac2ff7db49b9790ff2b6f90c9ba67d582dc0fc60e3d40ce1d0b46bd5ff16f6603c5902c2ceeca679a9ee4177d9e4917a3e06619fea3ef15801b1813f4edd61fd93c196bf37548b49966837c115adb9ff56a0044173c7401d59b06095be432e5fb9823ad0ab7c3671a49ce612cff363dc75a4c308), -- password123
+    (2, '$2b$12$barPjgDZ1D40b9nOpkwP2.LK5rp6Ydkt2IUH9hTiNwzXgrb6q1Zwi', 0x81b77300f10d, 0x82cccacb715eb7, 'rosime@gmail.com', 0x83418777370704c801, 'Applicant',
+    0x9c7323aac8005a9e263de6649ac44daf7c4b2e841b9c1d08cb2b14d9d31e3af2297e58f3989d9e075bc6f929b7eb7047a82cee6cfb28f210074fad0839e31c67358eb3341f3db7364db98179ae3fcd4d29116e9c03449598866c987f6d9a489007486002e93377278e922c8c36878db4b0377da67595fdcff1253c706089bea78b95e2c9a8e30a603c9b6576d70d2ed381aa17b2300248ec4a85a29cd68de81cf7afe818deb913fd0b159bc2fcb425416de7bb951461105915201fe081bda419097a2cd3d3d70ef25a6e519a1a2513bba8c42bd1f0516e3f16b8948ef10677a5f42d33fc80eae54987317455f804f70768b779040267f027bcf735377fc98720), -- 1234
+    (3, '$2b$12$rxoFmscZ2AOFfPtCMT1AH..9O/PDpAJ.vwlBSmlepV21VgAPKX6kS', 0x7b0898190ce9, 0xce3b3a16, 'biggie@gmail.com', 0x00a1835fa2696f140c, 'Recruiter',
+    0x071ca9008358496122192ab873c4b23e92ba651686879bb2bfdbf431acf80be4cb8cf2690b5796e7cccc77f324e8557e65edba787589e74fe1ec3536f38f8735162c948520daf1538011804e50e195c54e3dfe42ffc2d9f5944b670c5d1f12f219ea6394f074e634118566c5663adaece8a1d06db37863532df2547d66778053fea321b11b336e51c487d408ca14c3b1e8594513ffc9bcb8ed7b3627cf8c4586d77a4085b6494133f4181cc43bdfd3db0c0a2c0972921f3bf69335145824f83981b27926f47affdce334cdc648663608007c91536eff6dfc09904869f9735e5f17a272e489ff114e4f96878134b1985da2cf687dbb4939f98c47fcca3827a7bd); -- admins
+
+INSERT INTO Recruiter (UserID) VALUES
+    (3);
+
+INSERT INTO Applicant (UserID) VALUES
+    (1),
+    (2);
+
+INSERT INTO Offer (OfferID, RecruiterID, OfferTitle, OfferDescription) VALUES
+    (1, 3, 'Backend developer', 'Backend developer with SQL and C# skills. Competitive salary and flexible schedule.'),
+    (2, 3, 'Cleaning position', 'Hiring for a cleaning position. Responsibilities include maintaining cleanliness in various areas. Attention to detail and reliability are essential.');
+
+--INSERT INTO OfferApplicant (OfferID, UserID) VALUES
+--    (1,1),
+--    (2,2);
+

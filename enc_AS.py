@@ -23,7 +23,6 @@ the same random key as for CV
 '''
 
 import random
-import base64
 from pypdf import PdfReader, PdfWriter
 from Crypto.Protocol.KDF import PBKDF2
 from Crypto.Hash import SHA256
@@ -45,7 +44,7 @@ D - displayed info (in the webpage)
 def login(pwd, hash_pwd, udata=None, enc_key=None):
     dp2 = 2 + hash_pwd[1:].find('$')
     dp3 = 1 + dp2 + hash_pwd[dp2:].find('$')
-    pbkdf_salt = base64.b64decode(hash_pwd[dp3:])[:16]
+    pbkdf_salt = hash_pwd[dp3:dp3+16]
     seed = PBKDF2(pwd, pbkdf_salt, 16, 100000, hmac_hash_module=SHA256)
     random.seed(seed)
     user_sk = RSA.generate(bits=2048, randfunc=random.randbytes)
@@ -133,8 +132,16 @@ def share_CV(sym_key, recruiter_pk):
     rsa = PKCS1_OAEP.new(recruiter_pk)
     enc_key = rsa.encrypt(sym_key)
     return enc_key
-
 '''
+import binascii
+
+byte_array = [b'\xb0^\xc0\xe6\x08\xd2', b'?\xc8;\x1ckU\xc3', b'\xc8\xa79\xa5\xbd\xecR\xe3}']
+
+hex_array = [binascii.hexlify(element).decode('utf-8') for element in byte_array]
+
+print(hex_array)
+
+
 user = "larryka@gmail.com"
 name = "Larry"
 pwd = "password123"

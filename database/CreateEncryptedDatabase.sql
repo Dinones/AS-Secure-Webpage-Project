@@ -1,14 +1,15 @@
 CREATE TABLE MainUser (
     UserID INT PRIMARY KEY,
+    [id] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL UNIQUE DEFAULT NEWID(),
     PasswordHash NVARCHAR(100) NOT NULL,
-    EncryptedFirstName NVARCHAR(50) NOT NULL,
-    EncryptedLastName NVARCHAR(50) NOT NULL,
+    FirstName VARBINARY(MAX) NOT NULL,
+    LastName VARBINARY(MAX) NOT NULL,
     Email NVARCHAR(100) NOT NULL UNIQUE,
-    EncryptedTelephoneNumber NVARCHAR(15),
+    TelephoneNumber VARBINARY(MAX),
     UserType NVARCHAR(10),
-    UserPublicKey NVARCHAR(256),
-    EncryptedSymmetricKey NVARCHAR(256)
-);
+    UserPublicKey VARBINARY(MAX) FILESTREAM DEFAULT (0x),
+    EncryptedSymmetricKey VARBINARY(MAX)
+)ON [PRIMARY] FILESTREAM_ON FileStreamFileGroup;
 
 CREATE TABLE Recruiter (
     UserID INT PRIMARY KEY,
@@ -33,7 +34,7 @@ CREATE TABLE Offer (
 CREATE TABLE OfferApplicant (
     OfferID INT,
     UserID INT,
-    CV_EncryptedKey NVARCHAR(256),
+    CV_EncryptedKey VARBINARY(MAX),
     PRIMARY KEY (OfferID, UserID),
     FOREIGN KEY (OfferID) REFERENCES Offer(OfferID),
     FOREIGN KEY (UserID) REFERENCES Applicant(UserID)
