@@ -151,18 +151,6 @@ def get_job_offers_applicant():
 
     return jsonify(job_offers)
 
-# @app.route('/apply_to_offer', methods=['POST'])
-# def apply_to_offer():
-#     data = request.get_json()
-#     if 'title' in data:
-#         offer_title = data['title']
-#         print(f"Applying to offer: {offer_title}")
-
-#         # Return the redirect URL as a JSON response
-#         return jsonify({'redirect': url_for('applicant')})
-#     else:
-#         return jsonify({'error': 'Invalid request'})
-
 @app.route('/apply_to_offer', methods=['POST'])
 def apply_to_offer():
     if 'session_token' in session:
@@ -271,13 +259,40 @@ def download_pdf_from_database(userID, output_pdf_path = './temp_files/temp_CV.p
         with open(output_pdf_path, 'wb') as file:
             file.write(row[0])
 
-@app.route('/send_document_to_user')
+def download_email_pdf_from_database(userMail, output_pdf_path = './temp_files/temp_CV.pdf'):
+    global cursor, connection
+
+    cursor.execute(f"SELECT AP.CV FROM Applicant AP JOIN MainUser MU ON AP.UserID = MU.UserID WHERE MU.Email = '{userMail}';")
+    row = cursor.fetchone()
+    if row:
+        with open(output_pdf_path, 'wb') as file:
+            file.write(row[0])
+    else: print('ERROR: Not CV found')
+
+@app.route('/send_document_to_user', methods=['POST'])
 def send_document_to_user():
-    download_pdf_from_database(2)
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.RECRUITER: return "ERROR: Logged user is not a recruiter"
+
+    data = request.get_json()
+    if 'Email' in data:
+        applicant_email = data['Email']
+        print(f"Applying to offer: {applicant_email}")
+    else: return jsonify({'error': 'Invalid request'})
+    print(applicant_email)
+
+    download_email_pdf_from_database(applicant_email)
     document_path = './temp_files/temp_CV.pdf'
     document_name = 'CV.pdf'
 
-    # Send the file to the user for download
     return send_file(document_path, as_attachment=True, attachment_filename=document_name)
 
 def get_job_offers_from_database_for_applicant(userID):
@@ -317,10 +332,10 @@ def get_recruiter_applicants_from_database(userID):
 
     print("Getting job offers for applicant...")
     cursor.execute(f"SELECT CONCAT(MU.FirstName, ' ', MU.LastName) AS [Name], \
-                            CONCAT('Applied for: ', O.OfferTitle) AS Applied, \
-                            CONCAT('Email: ', MU.Email) AS Email, \
-                            CONCAT('Telephone number: ', MU.TelephoneNumber) AS TelephoneNumber \
-                    FROM OfferApplicant OA JOIN Offer O ON OA.OfferID = O.OfferID JOIN MainUser MU ON OA.UserID = MU.UserID WHERE O.recruiterID = ?", userID)
+                            O.OfferTitle AS Applied, \
+                            MU.Email AS Email, \
+                            MU.TelephoneNumber AS TelephoneNumber \
+                    FROM OfferApplicant OA JOIN Offer O ON OA.OfferID = O.OfferID JOIN MainUser MU ON OA.UserID = MU.UserID WHERE O.recruiterID = ?;", userID)
 
     rows = cursor.fetchall()
 
