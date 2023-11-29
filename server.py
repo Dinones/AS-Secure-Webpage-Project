@@ -470,16 +470,13 @@ def download_key_userID_database(userID, output_pdf_path = './temp_files/temp_CV
             file.write(row[0])
     else: print('ERROR: Not CV found')
 
-
-
-
 #################################################################################################################
 
 if __name__ == '__main__':
 
     print("RUNNING MAIN")
 
-    connect_to_database()
+    connect_to_database() 
 
     ####### THIS CODE UPLOADS THE SampleKeys\ FILES TO THE DATABASE #######
 
