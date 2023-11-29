@@ -19,11 +19,49 @@
             </div>
         </header>
 
+        <div style="position: absolute; top: 60px; right: 10px">
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" id="fileInput" accept=".pdf">
+                <p></p>
+                <button type="button" onclick="uploadDocument()">Upload PDF</button>
+                <p id="errorMessage"></p>
+            </form>
+        </div>
+        
+        
         <div class="hero" id="jobOffersContainer">
             <!-- Job offers will be displayed here -->
         </div>
         
         <script>
+            function uploadDocument() {
+                // Get the file input element
+                const fileInput = document.getElementById('fileInput');
+                
+                // Create a FormData object and append the file
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                // Send an AJAX request to the server
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.text())
+                // .then(message => console.log(message))
+                .then(message => {
+                    if (message.startsWith('ERROR:')) {
+                        // Display the error message in red under the button
+                        document.getElementById('errorMessage').textContent = message;
+                        console.log(message);
+                    } else {
+                        // Log the success message to the console
+                        console.log(message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
             // Use JavaScript to fetch job offers and update the HTML
             document.addEventListener('DOMContentLoaded', function () {
                 fetch('/get_job_offers_applicant')
