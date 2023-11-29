@@ -235,7 +235,7 @@ def disconnect_from_database():
 def check_login(email, password):
     global cursor, connection
 
-    cursor.execute(f"SELECT UserID, PasswordHash, UserType FROM MainUser WHERE Email = '{email}'")
+    cursor.execute(f"SELECT UserID, PasswordHash, UserType FROM MainUser WHERE Email = ?", email)
     rows = cursor.fetchall()
     if len(rows) != 1: 
         print('ERROR: Command did not return a single row!')
@@ -255,7 +255,7 @@ def upload_pdf_to_database(pdf_path, userID):
 
     try:
         with open(pdf_path, 'rb') as file:
-            cursor.execute(f"UPDATE Applicant SET [CV] = (?) WHERE UserID = {userID}", file.read())
+            cursor.execute(f"UPDATE Applicant SET [CV] = (?) WHERE UserID = ?", file.read(), userID)
         connection.commit()
         print("File successfully updated!")
     except pyodbc.Error as e: 
@@ -265,7 +265,7 @@ def upload_pdf_to_database(pdf_path, userID):
 def download_pdf_from_database(userID, output_pdf_path = './temp_files/temp_CV.pdf'):
     global cursor, connection
 
-    cursor.execute(f"SELECT [CV] FROM Applicant WHERE UserID = {userID}")
+    cursor.execute(f"SELECT [CV] FROM Applicant WHERE UserID = ?", userID)
     row = cursor.fetchone()
     if row:
         with open(output_pdf_path, 'wb') as file:
@@ -284,7 +284,7 @@ def get_job_offers_from_database_for_applicant(userID):
     global cursor, connection
 
     print("Getting job offers for applicant...")
-    cursor.execute(f"SELECT O.OfferTitle, O.OfferDescription, CASE WHEN OA.UserID IS NOT NULL THEN 1 ELSE 0 END AS IsRelated FROM Offer O LEFT JOIN OfferApplicant OA ON O.OfferID = OA.OfferID AND OA.UserID = {userID};")
+    cursor.execute(f"SELECT O.OfferTitle, O.OfferDescription, CASE WHEN OA.UserID IS NOT NULL THEN 1 ELSE 0 END AS IsRelated FROM Offer O LEFT JOIN OfferApplicant OA ON O.OfferID = OA.OfferID AND OA.UserID = ?;", userID)
 
     rows = cursor.fetchall()
 
@@ -303,7 +303,7 @@ def apply_to_offer_database(userID, jobTitle):
     global cursor, connection
     try:
         print("Getting job offers for applicant...")
-        cursor.execute(f"INSERT INTO OfferApplicant (OfferID, UserID) SELECT O.OfferID, A.UserID FROM Offer O JOIN Applicant A ON A.UserID = {userID} WHERE O.OfferTitle = '{jobTitle}';")
+        cursor.execute(f"INSERT INTO OfferApplicant (OfferID, UserID) SELECT O.OfferID, A.UserID FROM Offer O JOIN Applicant A ON A.UserID = ? WHERE O.OfferTitle = ?;", userID, jobTitle)
 
         connection.commit()
     except pyodbc.Error as e:
@@ -320,7 +320,7 @@ def get_recruiter_applicants_from_database(userID):
                             CONCAT('Applied for: ', O.OfferTitle) AS Applied, \
                             CONCAT('Email: ', MU.Email) AS Email, \
                             CONCAT('Telephone number: ', MU.TelephoneNumber) AS TelephoneNumber \
-                    FROM OfferApplicant OA JOIN Offer O ON OA.OfferID = O.OfferID JOIN MainUser MU ON OA.UserID = MU.UserID WHERE O.recruiterID = {userID};")
+                    FROM OfferApplicant OA JOIN Offer O ON OA.OfferID = O.OfferID JOIN MainUser MU ON OA.UserID = MU.UserID WHERE O.recruiterID = ?", userID)
 
     rows = cursor.fetchall()
 
