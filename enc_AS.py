@@ -42,7 +42,7 @@ D - displayed info (in the webpage)
 #call also for registration
 #in: password hash, user data <array> (needed only for registration), encrypted symmetric key (None in case of registration)
 #out: user sk (S), user pk (in case of registration DB), encrypted user data <array> (in case of registration DB), encrypted key (in case of registration DB), symmetric key (S)
-def login(hash_pwd, udata=None, enc_key=None):
+def login(pwd, hash_pwd, udata=None, enc_key=None):
     dp2 = 2 + hash_pwd[1:].find('$')
     dp3 = 1 + dp2 + hash_pwd[dp2:].find('$')
     pbkdf_salt = base64.b64decode(hash_pwd[dp3:])[:16]
@@ -58,6 +58,10 @@ def login(hash_pwd, udata=None, enc_key=None):
         enc_udata = None
         rsa = PKCS1_OAEP.new(user_sk)
         sym_key = rsa.decrypt(enc_key)
+    f = open('public_key.pem','wb')
+    f.write(user_pk.export_key('PEM'))
+    f.close()
+    user_pk = 'public_key.pem'
     return user_sk, user_pk, enc_udata, enc_key, sym_key
 
 #DON'T USE
@@ -78,7 +82,9 @@ def encrypt_udata(udata):
 #USE
 #in: encrypted user data <array>, symmetric key
 #out: user data <array> (D)
-def decrypt_udata(enc_udata, sym_key):
+def decrypt_udata(enc_udata, enc_key, user_sk):
+    rsa = PKCS1_OAEP.new(user_sk)
+    sym_key = rsa.decrypt(enc_key)
     aes_key = sym_key[:16]
     nonce = sym_key[16:]
     aes = AES.new(aes_key, AES.MODE_GCM, nonce=nonce)
@@ -122,11 +128,13 @@ def get_CV(enc_key, user_sk, file_path_in, file_path_out):
 #in: symmetric key, recruiter pk
 #out: encrypted symmetric key (DB)
 def share_CV(sym_key, recruiter_pk):
+    f = open(recruiter_pk,'r')
+    recruiter_pk = RSA.import_key(f.read())
     rsa = PKCS1_OAEP.new(recruiter_pk)
     enc_key = rsa.encrypt(sym_key)
     return enc_key
 
-
+'''
 user = "larryka@gmail.com"
 name = "Larry"
 pwd = "password123"
@@ -135,23 +143,22 @@ hash_pwd = "$2b$12$qni37LHcVYDi6NZzBUN7/uwSPf2xPj.VeOkIjc6nLt1CqWF8EUBqe"
 
 #EXAMPLE REGISTRATION
 udata = [user, name, pwd]
-user_sk, user_pk, enc_udata, enc_key, sym_key = login(hash_pwd, udata)
+user_sk, user_pk, enc_udata, enc_key, sym_key = login(pwd, hash_pwd, udata)
+udata = decrypt_udata(enc_udata, enc_key, user_sk)
+upload_CV(sym_key, "CV.pdf", "enc_CV.pdf")
+get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
+enc_key = share_CV(sym_key, user_pk)
+get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
+
+#EXAMPLE LOGIN
+#user_sk, user_pk, _, _, sym_key = login(pwd, hash_pwd, udata=None, enc_key=enc_key)
 #udata = decrypt_udata(enc_udata, sym_key)
 #upload_CV(sym_key, "CV.pdf", "enc_CV.pdf")
 #get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
 #enc_key = share_CV(sym_key, user_pk)
 #get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
 
-#EXAMPLE LOGIN
-user_sk, user_pk, _, _, sym_key = login(hash_pwd, udata=None, enc_key=enc_key)
-udata = decrypt_udata(enc_udata, sym_key)
-upload_CV(sym_key, "CV.pdf", "enc_CV.pdf")
-#get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
-enc_key = share_CV(sym_key, user_pk)
-get_CV(enc_key, user_sk, "enc_CV.pdf", "dec_CV.pdf")
 
-
-'''
 #registration/login
 dp2 = 2 + hash_pwd[1:].find('$')
 dp3 = 1 + dp2 + hash_pwd[dp2:].find('$')
