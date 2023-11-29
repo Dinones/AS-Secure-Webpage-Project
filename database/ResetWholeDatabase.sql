@@ -61,8 +61,8 @@ INSERT INTO Applicant (UserID) VALUES
     (2);
 
 INSERT INTO Offer (OfferID, RecruiterID, OfferTitle, OfferDescription) VALUES
-    (1, 3, 'Backend developer', 'Backend developer with SQL and C# skills. Competitive salary and flexible schedule.'),
-    (2, 3, 'Cleaning position', 'Hiring for a cleaning position. Responsibilities include maintaining cleanliness in various areas. Attention to detail and reliability are essential.');
+    (1, 3, 'Backend Developer', 'Backend developer with SQL and C# skills. Competitive salary and flexible schedule.'),
+    (2, 3, 'Cleaning Position', 'Hiring for a cleaning position. Responsibilities include maintaining cleanliness in various areas. Attention to detail and reliability are essential.');
 
 INSERT INTO OfferApplicant (OfferID, UserID) VALUES
     (1,1),

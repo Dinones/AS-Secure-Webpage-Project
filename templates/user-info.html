@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruitment Dashboard - EliteStaff Solutions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="navbar">
+                <div class="logo">EliteStaff Solutions</div>
+                <div class="nav-links">
+                    <a href="{{ url_for('applicant') }}" class="nav-item">Back</a>
+                </div>
+            </div>
+        </header>
+        
+        <main class="dashboard">
+            <section class="applicant-list">
+                <div class="hero" id="UserInfoContainer">
+                    <!-- Job offers will be displayed here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2023 All Rights Reserved</p>
+        </footer>
+
+        <script>
+            function uploadDocument() {
+                // Get the file input element
+                const fileInput = document.getElementById('fileInput');
+                
+                // Create a FormData object and append the file
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                // Send an AJAX request to the server
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.text())
+                // .then(message => console.log(message))
+                .then(message => {
+                    if (message.startsWith('ERROR:')) {
+                        // Display the error message in red under the button
+                        document.getElementById('errorMessage').textContent = message;
+                        console.log(message);
+                    } else {
+                        // Log the success message to the console
+                        console.log(message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                fetch('/get_user_info')
+                    .then(response => response.json())
+                    .then(data => {
+                        const UserInfoContainer = document.getElementById('UserInfoContainer');
+                        const jobApplicant = data; // Assuming data is a single object
+                        const jobApplicantDiv = document.createElement('div');
+                        jobApplicantDiv.innerHTML = `
+                            <div class="applicant-profile">
+                                <h2>Applicant Profile</h2>
+                                <h3>${jobApplicant['First name']} ${jobApplicant['Last name']}</h3>
+                                <p>Email: ${jobApplicant.Email}</p>
+                                <p>Telephone number: ${jobApplicant.TelephoneNumber}</p>
+                                <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="file" id="fileInput" accept=".pdf">
+                                    <p></p>
+                                    <button type="button" onclick="uploadDocument()">Upload PDF</button>
+                                    <p id="errorMessage"></p>
+                                </form>
+                            </div>`;
+                        UserInfoContainer.appendChild(jobApplicantDiv);
+                    })
+                    .catch(error => console.error('Error fetching applicant info:', error));
+            });
+        </script>
+    </div>
+</body>
+</html>

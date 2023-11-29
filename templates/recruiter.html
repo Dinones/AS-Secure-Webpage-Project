@@ -33,88 +33,64 @@
     <script>
         // Use JavaScript to fetch job offers and update the HTML
         document.addEventListener('DOMContentLoaded', function () {
-                fetch('/get_recruiter_applicants')
-                    .then(response => response.json())
-                    .then(data => {
-                        const jobApplicantsContainer = document.getElementById('jobApplicantsContainer');
+            fetch('/get_recruiter_applicants')
+                .then(response => response.json())
+                .then(data => {
+                    const jobApplicantsContainer = document.getElementById('jobApplicantsContainer');
 
-                        // Iterate through job offers and create HTML elements
-                        data.forEach(jobApplicant => {
-                            const jobApplicantDiv = document.createElement('div');
-                            jobApplicantDiv.innerHTML = `
-                            <div style="margin: 50px;">
-                                <h3>${jobApplicant.Name}</h3>
-                                <p>Applied for: ${jobApplicant.Applied}</p>
-                                <p>Email: ${jobApplicant.Email}</p>
-                                <p>Telephone number: ${jobApplicant.TelephoneNumber}</p>
-                                <button onclick="DownloadCV('${jobApplicant.Email}', '${jobApplicant.Name}')">Download CV</button>
-                            </div>`;
-                            jobApplicantsContainer.appendChild(jobApplicantDiv);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching job offers:', error));
-            });
-            // <a href="{{ url_for('send_document_to_user') }}" download><button>Download CV</button></a>
-
-            // function DownloadCV(Email) {
-            //     // Use fetch to send the Email to the backend
-            //     fetch('/send_document_to_user', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({ Email: Email }),
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         // Handle the response from the backend
-            //         console.log(data);
-
-            //         // Check for a success message or condition
-            //         // if (data && data.redirect) {
-            //         //     // Redirect the client-side browser to the specified URL
-            //         //     window.location.replace(data.redirect);
-            //         // }
-            //     })
-            //     .catch(error => console.error('Error applying to offer:', error));
-            // }
-
-            function DownloadCV(Email, Name) {
-                // Use fetch to send the Email and Name to the backend
-                fetch('/send_document_to_user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ Email: Email, Name: Name }),
+                    // Iterate through job offers and create HTML elements
+                    data.forEach(jobApplicant => {
+                        const jobApplicantDiv = document.createElement('div');
+                        jobApplicantDiv.innerHTML = `
+                        <div style="margin: 50px;">
+                            <h3>${jobApplicant.Name}</h3>
+                            <p>Applied for: ${jobApplicant.Applied}</p>
+                            <p>Email: ${jobApplicant.Email}</p>
+                            <p>Telephone number: ${jobApplicant.TelephoneNumber}</p>
+                            <button onclick="DownloadCV('${jobApplicant.Email}', '${jobApplicant.Name}')">Download CV</button>
+                        </div>`;
+                        jobApplicantsContainer.appendChild(jobApplicantDiv);
+                    });
                 })
-                .then(response => {
-                    // Check if the response status is OK (200)
-                    if (!response.ok) {
-                        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-                    }
+                .catch(error => console.error('Error fetching job offers:', error));
+        });
 
-                    // Extract the filename from the Content-Disposition header
-                    const contentDispositionHeader = response.headers.get('Content-Disposition');
-                    const filenameMatch = contentDispositionHeader && contentDispositionHeader.match(/filename="(.+)"/);
-                    const filename = filenameMatch ? filenameMatch[1] : `CV_${Name}.pdf`;
+        function DownloadCV(Email, Name) {
+            // Use fetch to send the Email and Name to the backend
+            fetch('/send_document_to_user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ Email: Email, Name: Name }),
+            })
+            .then(response => {
+                // Check if the response status is OK (200)
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
+                }
 
-                    // Convert the response to a blob
-                    return response.blob().then(blob => ({ blob, filename }));
-                })
-                .then(({ blob, filename }) => {
-                    // Create a temporary link to trigger the download
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => console.error('Error downloading document:', error));
-            }
+                // Extract the filename from the Content-Disposition header
+                const contentDispositionHeader = response.headers.get('Content-Disposition');
+                const filenameMatch = contentDispositionHeader && contentDispositionHeader.match(/filename="(.+)"/);
+                const filename = filenameMatch ? filenameMatch[1] : `CV_${Name}.pdf`;
+
+                // Convert the response to a blob
+                return response.blob().then(blob => ({ blob, filename }));
+            })
+            .then(({ blob, filename }) => {
+                // Create a temporary link to trigger the download
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading document:', error));
+        }
     </script>
 </body>
 </html>

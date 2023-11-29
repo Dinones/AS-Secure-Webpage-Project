@@ -39,6 +39,20 @@ def home():
 def about():
     return render_template('about.html')
 
+@app.route('/user_profile')
+def user_profile():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType == UserType.APPLICANT: return render_template('user-info.html')
+    else: return "ERROR: Logged user is not an applicant"
+
 @app.route('/job')
 def job():
     if 'session_token' in session:
@@ -189,6 +203,23 @@ def get_recruiter_applicants():
     recruiters = get_recruiter_applicants_from_database(ActiveUser.userID)
 
     return jsonify(recruiters)
+
+@app.route('/get_user_info', methods=['GET'])
+def get_user_info():
+    if 'session_token' in session:
+        session_token = session['session_token']
+
+        if session_token in active_sessions:
+            ActiveUser = active_sessions[session_token]
+            print(f"Active user's mail is {ActiveUser.userMail}, with ID = {ActiveUser.userID}")
+        else: return 'ERROR: Invalid session.'
+    else: return 'ERROR: Not logged in.'
+
+    if ActiveUser.userType != UserType.APPLICANT: return "ERROR: Logged user is not an applicant"
+
+    applicant_info = get_user_info_from_database(ActiveUser.userID)
+
+    return jsonify(applicant_info)
 
 #################################################################################################################
 
@@ -350,10 +381,26 @@ def get_recruiter_applicants_from_database(userID):
 
     return applicants
 
+def get_user_info_from_database(userID):
+    global cursor, connection
+
+    print("Getting applicant info...")
+    cursor.execute(f"SELECT FirstName, LastName, Email, TelephoneNumber FROM MainUser WHERE UserID = ?", userID)
+    row = cursor.fetchone()
+
+    applicant_info = {}
+
+    applicant_info['First name'] = row[0]
+    applicant_info['Last name'] = row[1]
+    applicant_info['Email'] = row[2]
+    applicant_info['TelephoneNumber'] = row[3]
+
+    return applicant_info
+
 #################################################################################################################
 
 if __name__ == '__main__':
     connect_to_database()
-    try: app.run(debug=True)
-    # try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
+    # try: app.run(debug=True)
+    try: app.run(debug=True, ssl_context=('./certificates/cert.pem', './certificates/key.pem'))
     except: disconnect_from_database()
