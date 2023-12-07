@@ -1,7 +1,5 @@
 body, html {
     font-family: 'Arial', sans-serif;
-    /*background: url('./background.png') no-repeat center center fixed;*/
-    /*background-size: cover; /* Cover the entire area of the page */
     margin: 0;
     padding: 0;
     height: 100%; 
@@ -9,17 +7,17 @@ body, html {
 }
 
 .container {
-    width: 100%; /* Set container width to take full width of the viewport */
-    height: 100vh; /* Set container height to take full viewport height */
-    display: flex; /* Use flexbox to center content vertically and horizontally */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    flex-direction: column; /* Stack items vertically */
-    text-align: center; /* Center text */
+    width: 100%; 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    flex-direction: column; 
+    text-align: center; 
 }
 
 .navbar {
-    background-color: #210F49; /* Adjust the color to match your design */
+    background-color: #210F49; 
     color: white;
     display: flex;
     justify-content: space-between;
@@ -27,8 +25,8 @@ body, html {
     width: 100%;
     box-sizing: border-box;
     position: fixed; 
-    top: 0; /* Position at the top */
-    left: 0; /* Align to the left */
+    top: 0;
+    left: 0;
     z-index: 1000;
 }
 
@@ -40,53 +38,52 @@ body, html {
 
 .hero {
 
-    align-items: flex-start; /* Align the content to the top */
+    align-items: flex-start; 
     padding-top: 100px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 50px 20px;
-    background-color: rgba(255, 255, 255, 0.8); /* This makes the background semi-transparent */
+    background-color: rgba(255, 255, 255, 0.8); 
     color: #210F49;
 }
 
 .login-form form {
-    width: calc(50% - 40px); /* Assuming 50% is the width of your text content */
-    margin-left: -650px; /* Push the form to the right */
-    margin-right: auto; /* Spacing from the right side of the viewport */
-    margin-top: -80px; /* Adjust as needed to lower the form */
+    width: calc(50% - 40px); 
+    margin-left: -650px; 
+    margin-right: auto; 
+    margin-top: -80px; 
     display: flex;
-    flex-direction: column; /* Stack the form items vertically */
-    width: 300px; /* Or any other width depending on your design */
-    margin-top: 20px; /* Or any other margin you find appropriate */
+    flex-direction: column;
+    width: 300px; 
+    margin-top: 20px; 
 }
 
 .login-form input {
-    margin-bottom: 10px; /* Space between form fields */
-    padding: 10px; /* Padding inside the input fields */
-    border: 1px solid #ddd; /* Border for the inputs */
-    border-radius: 5px; /* Rounded corners for the inputs */
+    margin-bottom: 10px; 
+    padding: 10px; 
+    border: 1px solid #ddd;
+    border-radius: 5px; 
 }
 
 .login-button {
-    padding: 10px; /* Padding inside the button */
-    border: none; /* No border for the button */
-    border-radius: 5px; /* Rounded corners for the button */
-    background-color: #210F49; /* Background color for the button */
-    color: white; /* Text color for the button */
-    cursor: pointer; /* Changes the cursor to a pointer on hover */
+    padding: 10px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #210F49; 
+    color: white;
+    cursor: pointer; 
 }
 
-/* Adjust the content class to add margin to the top */
 .content {
-    margin-top: -370px; /* Adjust this value as needed to move content up */
-    width: 50%; /* Use width instead of max-width to control the size */
-    text-align: left; /* Align text to the left */
+    margin-top: -370px; 
+    width: 50%; 
+    text-align: left; 
     margin-right: auto;
 }
 
 .image-container {
-    width: 50%; /* Control the size of the image container */
+    width: 50%; 
     display: flex;
     justify-content: flex-end;
 }
@@ -107,96 +104,84 @@ body, html {
 
 .cta-button {
     text-decoration: none;
-    background-color: #210F49; /* Adjust the color to match your design */
-    color: #FFFFFF; /* Adjust the color to match your design */
+    background-color: #210F49;
+    color: #FFFFFF; 
     padding: 0.5em 1em;
     border-radius: 20px;
 }
 
 footer {
-    background-color: white; /* Adjust the color to match your design */
+    background-color: white; 
     color: #210F49;
     text-align: center;
     padding: 1em 0;
 }
 
-/*about us style*/
 .about-heading {
     font-size: 2.5em;
-    color: #210F49; /* Use your brand's purple color */
-    margin-bottom: 20px; /* Add some space below the heading */
+    color: #210F49; 
+    margin-bottom: 20px; 
 }
 
 .profile-container {
-    margin-bottom: 20px; /* Add some space between the profile container and job matches */
-    
+    margin-bottom: 20px;
 }
 
 .job-matches {
-    width: 100%; /* Take the full width of its parent */
-    margin-bottom: 20px; /* Add some space between each job match */
+    width: 100%; 
+    margin-bottom: 20px;
     margin-top: 100px;
     margin-left: 15px;
 }
+
 /* ========================== Style for Job info pages================================== */
 
-/* ... existing styles ... */
-
 .job-details-container {
-    margin-top: 100px; /* Adjust according to your header's height */
-    padding: 0 20px; /* Add some padding on the sides */
+    margin-top: 100px; 
+    padding: 0 20px; 
 }
 
 .job-title {
-    color: #210F49; /* Use your brand color */
-    margin-bottom: 20px; /* Space between title and description */
+    color: #210F49; 
+    margin-bottom: 20px; 
 }
 
 .job-description {
-    margin-bottom: 30px; /* Space between description and button */
+    margin-bottom: 30px;
 }
 
 .apply-button {
-    padding: 10px 20px; /* Button padding */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    background-color: #210F49; /* Background color */
-    color: white; /* Text color */
-    cursor: pointer; /* Cursor effect on hover */
-    text-transform: uppercase; /* Optional: capitalize letters */
-    font-weight: bold; /* Optional: make text bold */
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #210F49; 
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase; 
+    font-weight: bold; 
 }
 
 .apply-button:hover {
-    background-color: #1e0e3f; /* Darker shade for hover effect */
+    background-color: #1e0e3f; 
 }
-
-/* ... Job Confirmation... */
 
 .confirmation-container {
-    margin-top: 100px; /* Adjust according to your header's height */
-    padding: 0 20px; /* Add some padding on the sides */
-    text-align: center; /* Center text for confirmation */
+    margin-top: 100px; 
+    padding: 0 20px;
+    text-align: center; 
 }
 
-/* ... Resume Viewer... */
-
 .resume-container {
-    margin-top: 100px; /* Adjust as needed */
-    padding: 0 20px; /* Add some padding on the sides */
-    text-align: center; /* Center text for the resume page */
+    margin-top: 100px; 
+    padding: 0 20px;
+    text-align: center; 
 }
 
 .resume-content {
     margin-top: 20px;
-    border: 1px solid #ddd; /* A light border around the resume content */
+    border: 1px solid #ddd;
     padding: 15px;
-    background-color: #fff; /* A white background for the resume content */
-    height: 500px; /* Or any other height */
-    overflow: auto; /* In case the content overflows */
+    background-color: #fff; 
+    height: 500px; 
+    overflow: auto; 
 }
-
-/* ... any additional styles ... */
-
-
-
