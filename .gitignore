@@ -2,3 +2,5 @@
 *.docx
 __pycache__
 test.py
+LaTex/
+!Technical Report.pdf
